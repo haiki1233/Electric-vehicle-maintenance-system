@@ -1,0 +1,79 @@
+server:
+  port: 8080 # Cổng mặc định của API Gateway
+
+spring:
+  application:
+    name: api-gateway
+    
+  cloud:
+    gateway:
+      # 1. Cấu hình CORS tập trung tại Gateway
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: 
+              - "http://localhost:3000" # URL của frontend React/Vue
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            
+      # 2. Cấu hình Routing (Điều hướng request)
+      routes:
+        # Route cho Auth Service (Xử lý đăng nhập, cấp token)
+        - id: auth-service
+          uri: http://localhost:8081 # Đổi thành lb://auth-service nếu dùng Eureka
+          predicates:
+            - Path=/api/auth/**
+            
+        # Route cho Maintenance Service (Dịch vụ bảo dưỡng)
+        - id: maintenance-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/maintenance/**
+            
+        # Route cho Customer Service (Khách hàng)
+        - id: customer-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/customers/**
+
+        # Route cho Payment Service (Thanh toán)
+        - id: payment-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/payments/**
+
+        # Route cho Vehicle Service (Xe điện)
+        - id: vehicle-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/vehicles/**
+
+        # Route cho Notification Service (Thông báo)
+        - id: notification-service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/notifications/**
+
+        # Route cho Chatbot Service (Trợ lý ảo)
+        - id: chatbot-service
+          uri: http://localhost:8087
+          predicates:
+            - Path=/api/chatbots/**
+
+        # Route cho Appointment Service (Đặt lịch hẹn)
+        - id: appointment-service
+          uri: http://localhost:8088
+          predicates:
+            - Path=/api/appointments/**
+
+# Cấu hình hiển thị log để dễ debug khi cấu hình route sai
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
