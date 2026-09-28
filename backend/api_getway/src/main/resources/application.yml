@@ -26,49 +26,49 @@ spring:
       routes:
         # Route cho Auth Service (Xử lý đăng nhập, cấp token)
         - id: auth-service
-          uri: http://localhost:8081 # Đổi thành lb://auth-service nếu dùng Eureka
+          uri: lb://auth-service 
           predicates:
             - Path=/api/auth/**
             
         # Route cho Maintenance Service (Dịch vụ bảo dưỡng)
         - id: maintenance-service
-          uri: http://localhost:8082
+          uri: lb://maintenance-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/maintenance/**
             
         # Route cho Customer Service (Khách hàng)
         - id: customer-service
-          uri: http://localhost:8083
+          uri: lb://customer-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/customers/**
 
         # Route cho Payment Service (Thanh toán)
         - id: payment-service
-          uri: http://localhost:8084
+          uri: lb://payment-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/payments/**
 
         # Route cho Vehicle Service (Xe điện)
         - id: vehicle-service
-          uri: http://localhost:8085
+          uri: lb://vehicle-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/vehicles/**
 
         # Route cho Notification Service (Thông báo)
         - id: notification-service
-          uri: http://localhost:8086
+          uri: lb://notification-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/notifications/**
 
         # Route cho Chatbot Service (Trợ lý ảo)
         - id: chatbot-service
-          uri: http://localhost:8087
+          uri: lb://chatbot-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/chatbots/**
 
         # Route cho Appointment Service (Đặt lịch hẹn)
         - id: appointment-service
-          uri: http://localhost:8088
+          uri: lb://appointment-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/appointments/**
 
@@ -77,3 +77,10 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
