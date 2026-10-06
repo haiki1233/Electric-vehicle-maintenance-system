@@ -64,7 +64,7 @@ spring:
         - id: vehicle-service
           uri: lb://vehicle-service # Sử dụng load balancer của Eureka
           predicates:
-            - Path=/api/vehicles/**
+            - Path=/api/v1/vehicles/**
 
         # Route cho Notification Service (Thông báo)
         - id: notification-service
