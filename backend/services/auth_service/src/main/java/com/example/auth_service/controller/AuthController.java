@@ -19,6 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.example.auth_service.dto.event.UserCreatedEvent;
+import com.example.auth_service.config.RabbitMQConfig;
+
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +35,7 @@ public class AuthController {
     @Autowired private UserRepository userRepository;
     @Autowired private RoleRepository roleRepository;
     @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private RabbitTemplate rabbitTemplate;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request) {
@@ -57,6 +62,14 @@ public class AuthController {
                 .build();
 
         userRepository.save(newUser);
+
+        // BẮN SỰ KIỆN LÊN RABBITMQ ĐỂ CÁC SERVICE KHÁC LẤY VỀ
+        UserCreatedEvent event = UserCreatedEvent.builder()
+                .id(newUser.getId())
+                .fullname(newUser.getFullname())
+                .email(newUser.getEmail())
+                .build();
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY_USER_CREATED, event);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.builder()
                 .success(true)
