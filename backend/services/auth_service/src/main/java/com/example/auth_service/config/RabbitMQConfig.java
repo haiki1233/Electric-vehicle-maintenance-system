@@ -5,10 +5,6 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 70653b2 (feat(auth-service): Integrate RabbitMQ for data sharing.)
 @Configuration
 public class RabbitMQConfig {
     
