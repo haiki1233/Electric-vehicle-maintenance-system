@@ -1,6 +1,7 @@
 package com.example.catalog_product_service.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import java.math.BigDecimal;
 
@@ -25,6 +26,7 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price; // Dùng BigDecimal chuẩn hóa dữ liệu tiền tệ
 
+    @Min(value = 0, message = "Số lượng tồn kho không được nhỏ hơn 0")
     private Integer stockQuantity; // Số lượng tồn kho (áp dụng cho phụ tùng)
 
     @ManyToOne(fetch = FetchType.LAZY)
