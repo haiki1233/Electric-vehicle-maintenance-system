@@ -48,12 +48,6 @@ spring:
           predicates:
             - Path=/api/maintenance/**
             
-        # Route cho Customer Service (Khách hàng)
-        - id: customer-service
-          uri: lb://customer-service # Sử dụng load balancer của Eureka
-          predicates:
-            - Path=/api/customers/**
-
         # Route cho Payment Service (Thanh toán)
         - id: payment-service
           uri: lb://payment-service # Sử dụng load balancer của Eureka
@@ -65,6 +59,12 @@ spring:
           uri: lb://vehicle-service # Sử dụng load balancer của Eureka
           predicates:
             - Path=/api/v1/vehicles/**
+
+        # Thêm cấu hình cho Catalog & Product Service
+        - id: catalog-product-service
+          uri: lb://CATALOG-PRODUCT-SERVICE
+          predicates:
+            - Path=/api/v1/categories/**, /api/v1/products/**
 
         # Route cho Notification Service (Thông báo)
         - id: notification-service

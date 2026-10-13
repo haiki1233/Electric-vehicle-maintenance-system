@@ -53,6 +53,10 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .pathMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
 
+                // 1. MỞ CỔNG CHÍNH: Cho phép ai cũng được GET danh mục và sản phẩm
+                .pathMatchers(HttpMethod.GET, "/api/v1/categories", "/api/v1/categories/**").permitAll()
+                .pathMatchers(HttpMethod.GET, "/api/v1/products", "/api/v1/products/**").permitAll()
+
                 // 2. ADMIN — yêu cầu authority ROLE_ADMIN (được map từ claim "role")
                 .pathMatchers(HttpMethod.GET,   "/api/v1/users").hasRole("ADMIN")
                 .pathMatchers(HttpMethod.PATCH, "/api/v1/users/*/role").hasRole("ADMIN")
